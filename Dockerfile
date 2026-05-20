@@ -8,6 +8,9 @@ WORKDIR /app
 
 COPY . .
 
-EXPOSE $PORT
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT:-8080} -t /app"]
+EXPOSE 8080
+
+CMD ["/entrypoint.sh"]

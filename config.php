@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $pdo = getDbConnection();
-$stmt = $pdo->query("SELECT nombre, ruc, telefono, direccion, horario_apertura, horario_cierre FROM configuracion ORDER BY id DESC LIMIT 1");
+$stmt = $pdo->query("SELECT nombre, ruc, telefono, direccion, horario_apertura, horario_cierre FROM config ORDER BY id DESC LIMIT 1");
 $config = $stmt->fetch();
 
 if (!$config) {

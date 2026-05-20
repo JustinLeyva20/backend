@@ -32,7 +32,7 @@ if ($stmt->fetch()) {
 
 $hash = password_hash($password, PASSWORD_BCRYPT);
 $stmt = $pdo->prepare(
-    "INSERT INTO usuarios (nombre, correo, password, telefono, direccion) VALUES (?, ?, ?, ?, ?) RETURNING id, nombre, correo, telefono, direccion"
+    "INSERT INTO usuarios (nombre, correo, pass, rol, telefono, direccion) VALUES (?, ?, ?, 'Cliente', ?, ?) RETURNING id, nombre, correo, telefono, direccion"
 );
 $stmt->execute([$nombre, $correo, $hash, $telefono, $direccion]);
 $user = $stmt->fetch();
@@ -41,6 +41,6 @@ jsonResponse([
     "id" => (int)$user['id'],
     "nombre" => $user['nombre'],
     "correo" => $user['correo'],
-    "telefono" => $user['telefono'],
-    "direccion" => $user['direccion'],
+    "telefono" => $user['telefono'] ?? '',
+    "direccion" => $user['direccion'] ?? '',
 ], 201);

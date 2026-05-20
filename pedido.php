@@ -20,6 +20,11 @@ if (empty($nombreCliente) || empty($telefono) || empty($direccion) || empty($pro
     jsonResponse(["error" => "Datos incompletos"], 400);
 }
 
+$metodoPago = strtoupper($metodoPago);
+if (!in_array($metodoPago, ['EFECTIVO', 'YAPE', 'PLIN', 'TARJETA'])) {
+    jsonResponse(["error" => "Método de pago inválido"], 400);
+}
+
 $pdo = getDbConnection();
 
 $total = 0;
@@ -34,15 +39,15 @@ try {
     $pdo->beginTransaction();
 
     $stmt = $pdo->prepare(
-        "INSERT INTO pedidos (usuario, nombre_cliente, telefono, direccion, fecha, hora, metodo_pago, total, estado)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pendiente') RETURNING id"
+        "INSERT INTO pedidos_web (usuario, nombre_cliente, telefono, direccion, fecha, hora, metodo_pago, total, estado)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'PENDIENTE') RETURNING id"
     );
     $stmt->execute([$usuario, $nombreCliente, $telefono, $direccion, $fecha, $hora, $metodoPago, $total]);
     $pedido = $stmt->fetch();
     $pedidoId = $pedido['id'];
 
     $stmtDetalle = $pdo->prepare(
-        "INSERT INTO detalle_pedidos (pedido_id, nombre, precio, cantidad) VALUES (?, ?, ?, ?)"
+        "INSERT INTO detalle_pedidos_web (id_pedido, nombre, precio, cantidad) VALUES (?, ?, ?, ?)"
     );
 
     foreach ($productos as $p) {

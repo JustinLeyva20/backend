@@ -17,7 +17,7 @@ $pdo = getDbConnection();
 
 $stmt = $pdo->prepare(
     "SELECT id, nombre_cliente, telefono, direccion, fecha, hora, metodo_pago, total, estado
-     FROM pedidos WHERE usuario = ? ORDER BY id DESC"
+     FROM pedidos_web WHERE usuario = ? ORDER BY id DESC"
 );
 $stmt->execute([$usuario]);
 $pedidos = $stmt->fetchAll();
@@ -25,7 +25,7 @@ $pedidos = $stmt->fetchAll();
 $result = [];
 foreach ($pedidos as $pedido) {
     $stmtDetalle = $pdo->prepare(
-        "SELECT nombre, precio, cantidad FROM detalle_pedidos WHERE pedido_id = ?"
+        "SELECT nombre, precio, cantidad FROM detalle_pedidos_web WHERE id_pedido = ?"
     );
     $stmtDetalle->execute([$pedido['id']]);
     $detalles = $stmtDetalle->fetchAll();

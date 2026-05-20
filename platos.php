@@ -8,8 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $pdo = getDbConnection();
-$stmt = $pdo->prepare("SELECT id, nombre, precio, imagen, badge, fecha FROM menu_items WHERE categoria = 'plato' ORDER BY id");
-$stmt->execute();
+$stmt = $pdo->query("SELECT id, nombre, precio, COALESCE(imagen, '') as imagen, fecha FROM platos ORDER BY id");
 $items = $stmt->fetchAll();
 
 $items = array_map(function ($item) {
@@ -18,8 +17,8 @@ $items = array_map(function ($item) {
         "nombre" => $item['nombre'],
         "precio" => (float)$item['precio'],
         "imagen" => $item['imagen'],
-        "badge" => $item['badge'],
-        "fecha" => $item['fecha'],
+        "badge" => "",
+        "fecha" => $item['fecha'] ?? '',
     ];
 }, $items);
 

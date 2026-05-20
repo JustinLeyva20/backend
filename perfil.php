@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         "id" => (int)$user['id'],
         "nombre" => $user['nombre'],
         "correo" => $user['correo'],
-        "telefono" => $user['telefono'],
-        "direccion" => $user['direccion'],
+        "telefono" => $user['telefono'] ?? '',
+        "direccion" => $user['direccion'] ?? '',
     ]);
 }
 
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         $params[] = trim($input['direccion']);
     }
     if (!empty($input['password'])) {
-        $fields[] = "password = ?";
+        $fields[] = "pass = ?";
         $params[] = password_hash($input['password'], PASSWORD_BCRYPT);
     }
 
@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         "id" => (int)$user['id'],
         "nombre" => $user['nombre'],
         "correo" => $user['correo'],
-        "telefono" => $user['telefono'],
-        "direccion" => $user['direccion'],
+        "telefono" => $user['telefono'] ?? '',
+        "direccion" => $user['direccion'] ?? '',
     ]);
 }
 

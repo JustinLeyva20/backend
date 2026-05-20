@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y libpq-dev \
 
 WORKDIR /app
 
-COPY api/ ./api/
+COPY . .
 
 EXPOSE $PORT
 

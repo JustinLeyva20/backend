@@ -1,0 +1,7 @@
+{
+    "name": "app_rest/backend",
+    "description": "Backend PHP para app_rest con Neon PostgreSQL",
+    "require": {
+        "php": ">=8.1"
+    }
+}

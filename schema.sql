@@ -54,3 +54,31 @@ CREATE TABLE IF NOT EXISTS configuracion (
 INSERT INTO configuracion (nombre, ruc, telefono, direccion, horario_apertura, horario_cierre)
 VALUES ('Mi Restaurante', '12345678901', '999888777', 'Av. Principal 123', '08:00', '22:00')
 ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS salas (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    mesas INTEGER NOT NULL DEFAULT 8
+);
+
+INSERT INTO salas (nombre, mesas) VALUES ('Salón Principal', 8)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('Terraza', 6)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('VIP', 4)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('Jardín', 6)
+ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS reservas (
+    id SERIAL PRIMARY KEY,
+    id_sala INTEGER NOT NULL REFERENCES salas(id) ON DELETE CASCADE,
+    num_mesa INTEGER NOT NULL,
+    usuario VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    personas INTEGER NOT NULL DEFAULT 1,
+    nota TEXT DEFAULT '',
+    estado VARCHAR(50) DEFAULT 'PENDIENTE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

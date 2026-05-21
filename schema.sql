@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     correo VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    pass VARCHAR(255) NOT NULL,
     telefono VARCHAR(50) DEFAULT '',
     direccion TEXT DEFAULT '',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -48,9 +48,38 @@ CREATE TABLE IF NOT EXISTS configuracion (
     telefono VARCHAR(50) NOT NULL,
     direccion TEXT NOT NULL,
     horario_apertura VARCHAR(50) NOT NULL,
-    horario_cierre VARCHAR(50) NOT NULL
+    horario_cierre VARCHAR(50) NOT NULL,
+    mensaje TEXT DEFAULT ''
 );
 
-INSERT INTO configuracion (nombre, ruc, telefono, direccion, horario_apertura, horario_cierre)
-VALUES ('Mi Restaurante', '12345678901', '999888777', 'Av. Principal 123', '08:00', '22:00')
+INSERT INTO configuracion (nombre, ruc, telefono, direccion, horario_apertura, horario_cierre, mensaje)
+VALUES ('Restaurante la Delicia', '65479877', '957847894', 'Lima - Perú', '08:00', '20:00', 'Gracias por su visita')
 ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS salas (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    mesas INTEGER NOT NULL DEFAULT 8
+);
+
+INSERT INTO salas (nombre, mesas) VALUES ('Salón Principal', 8)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('Terraza', 6)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('VIP', 4)
+ON CONFLICT DO NOTHING;
+INSERT INTO salas (nombre, mesas) VALUES ('Jardín', 6)
+ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS reservas (
+    id SERIAL PRIMARY KEY,
+    id_sala INTEGER NOT NULL REFERENCES salas(id) ON DELETE CASCADE,
+    num_mesa INTEGER NOT NULL,
+    usuario VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    personas INTEGER NOT NULL DEFAULT 1,
+    nota TEXT DEFAULT '',
+    estado VARCHAR(50) DEFAULT 'PENDIENTE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

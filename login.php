@@ -16,7 +16,7 @@ if (empty($correo) || empty($password)) {
 }
 
 $pdo = getDbConnection();
-$stmt = $pdo->prepare("SELECT id, nombre, correo, telefono, direccion, pass FROM usuarios WHERE correo = ?");
+$stmt = $pdo->prepare("SELECT id, nombre, correo, telefono, direccion, pass, created_at FROM usuarios WHERE correo = ?");
 $stmt->execute([$correo]);
 $user = $stmt->fetch();
 
@@ -40,4 +40,5 @@ jsonResponse([
     "correo" => $user['correo'],
     "telefono" => $user['telefono'] ?? '',
     "direccion" => $user['direccion'] ?? '',
+    "fecha_registro" => $user['created_at'] ?? '',
 ]);

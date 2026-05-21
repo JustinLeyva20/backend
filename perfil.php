@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         jsonResponse(["error" => "Parámetro correo requerido"], 400);
     }
 
-    $stmt = $pdo->prepare("SELECT id, nombre, correo, telefono, direccion FROM usuarios WHERE correo = ?");
+    $stmt = $pdo->prepare("SELECT id, nombre, correo, telefono, direccion, created_at FROM usuarios WHERE correo = ?");
     $stmt->execute([$correo]);
     $user = $stmt->fetch();
 
@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         "correo" => $user['correo'],
         "telefono" => $user['telefono'] ?? '',
         "direccion" => $user['direccion'] ?? '',
+        "fecha_registro" => $user['created_at'] ?? '',
     ]);
 }
 
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     }
 
     $params[] = $correo;
-    $sql = "UPDATE usuarios SET " . implode(", ", $fields) . " WHERE correo = ? RETURNING id, nombre, correo, telefono, direccion";
+    $sql = "UPDATE usuarios SET " . implode(", ", $fields) . " WHERE correo = ? RETURNING id, nombre, correo, telefono, direccion, created_at";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $user = $stmt->fetch();
@@ -77,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
         "correo" => $user['correo'],
         "telefono" => $user['telefono'] ?? '',
         "direccion" => $user['direccion'] ?? '',
+        "fecha_registro" => $user['created_at'] ?? '',
     ]);
 }
 
